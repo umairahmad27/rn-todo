@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useAuthContext } from '../../contexts/AuthContext'
 import { View, Text, ImageBackground, StyleSheet } from 'react-native'
 import { TextInput, Button } from 'react-native-paper'
+import auth from "@react-native-firebase/auth"
 
 import bg from "../../assets/images/bg.jpg"
 
@@ -13,6 +14,7 @@ export default function Register({ navigation }) {
 
     const [state, setState] = useState(initialState)
     const [isPasswordShow, setIsPasswordShow] = useState(false)
+    const [isProcessing, setIsProcessing] = useState(false)
 
     const handleChange = (name, value) => {
         setState(s => ({ ...s, [name]: value }))
@@ -22,10 +24,33 @@ export default function Register({ navigation }) {
     const handleRegister = () => {
         let { email, password } = state
 
-        console.log("email =>", email)
-        console.log("password =>", password)
+        if (!email) return alert("Email is invalid")
+        if (!password) return alert("Password is invalid")
 
-        dispatch({ type: "LOGIN" })
+        setIsProcessing(true)
+
+        auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                const user = userCredential.user
+
+                dispatch({ type: "LOGIN", payload: { user } })
+                console.log('User account created & signed in!');
+            })
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    console.log('That email address is already in use!');
+                }
+
+                if (error.code === 'auth/invalid-email') {
+                    console.log('That email address is invalid!');
+                }
+
+                console.error(error);
+            })
+            .finally(() => {
+                setIsProcessing(false)
+            })
     }
 
     return (
@@ -51,7 +76,7 @@ export default function Register({ navigation }) {
                     />
                 </View>
                 <View style={styles.row}>
-                    <Button mode="contained" color='white' onPress={handleRegister}>
+                    <Button mode="contained" color='white' loading={isProcessing} disabled={isProcessing} onPress={handleRegister}>
                         Register
                     </Button>
                 </View>
