@@ -3,13 +3,13 @@ import React, { createContext, useContext, useReducer } from 'react'
 
 const AuthContext = createContext()
 
-const initialState = { isAuthenticated: false, user: { name: "Umair" } }
+const initialState = { isAuthenticated: false }
 
 const reducer = (state, { type }) => {
 
     switch (type) {
         case "LOGIN":
-            return Object.assign({}, { isAuthenticated: true }, { user: { name: "Umair" } })
+            return Object.assign({}, { isAuthenticated: true }, { user: { email: "m.umairahmad1@gmail.com" } })
         case "LOGOUT":
             return Object.assign({}, { isAuthenticated: false })
         default:

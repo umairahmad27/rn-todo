@@ -7,7 +7,7 @@ import bg from "../../assets/images/bg.jpg"
 
 const initialState = { email: "", password: "" }
 
-export default function Login({ navigation }) {
+export default function Register({ navigation }) {
 
     const { dispatch } = useAuthContext()
 
@@ -19,7 +19,7 @@ export default function Login({ navigation }) {
 
     }
 
-    const handleLogin = () => {
+    const handleRegister = () => {
         let { email, password } = state
 
         console.log("email =>", email)
@@ -30,9 +30,8 @@ export default function Login({ navigation }) {
 
     return (
         <ImageBackground source={bg} style={styles.container}>
-
             <View style={{ flex: 1, justifyContent: "center" }}>
-                <Text style={[styles.textWhite, styles.h1]}>Login</Text>
+                <Text style={[styles.textWhite, styles.h1]}>Register</Text>
 
                 <View style={styles.row}>
                     <TextInput
@@ -52,15 +51,15 @@ export default function Login({ navigation }) {
                     />
                 </View>
                 <View style={styles.row}>
-                    <Button mode="contained" color='white' onPress={handleLogin}>
-                        Login
+                    <Button mode="contained" color='white' onPress={handleRegister}>
+                        Register
                     </Button>
                 </View>
             </View>
 
             <View style={styles.row}>
-                <Button color='white' onPress={() => { navigation.navigate("Register") }}>
-                    Don't have an account?
+                <Button color='white' onPress={() => { navigation.navigate("Login") }}>
+                    Already have an account?
                 </Button>
             </View>
         </ImageBackground>
@@ -70,8 +69,12 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: 16,
+        paddingHorizontal: 16
+    },
+    flexContainer: {
+        flex: 1,
         justifyContent: "center",
+        // alignItems: "center"
     },
     h1: {
         fontSize: 32,
